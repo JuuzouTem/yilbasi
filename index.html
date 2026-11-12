@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yılbaşı Çekilişi 🎄🎁</title>
+  <style>
+    :root {
+      --bg-dark: #081810;
+      --card-bg: rgba(18, 43, 30, 0.9);
+      --card-border: rgba(246, 196, 69, 0.25);
+      --accent-red: #c92a2a;
+      --accent-red-hover: #b02525;
+      --gold: #f6c445;
+      --text: #f8f9fa;
+      --text-muted: #b5c7bd;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #133a24 0%, var(--bg-dark) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    canvas#snow, canvas#confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+    }
+    canvas#snow { z-index: 1; }
+    canvas#confetti { z-index: 100; }
+
+    .container {
+      width: 100%;
+      max-width: 620px;
+      position: relative;
+      z-index: 2;
+      margin-top: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 2.1rem;
+      color: var(--gold);
+      text-shadow: 0 0 16px rgba(246, 196, 69, 0.4);
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.4);
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 8px rgba(246, 196, 69, 0.4);
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-red {
+      background: var(--accent-red);
+      color: white;
+    }
+    .btn-red:hover { background: var(--accent-red-hover); }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #1a1a1a;
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 14px;
+      margin-top: 10px;
+    }
+    .btn-gold:hover { background: #e5b338; }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+    .btn-outline:hover { background: rgba(246, 196, 69, 0.15); }
+
+    .btn-wa {
+      background: #25D366;
+      color: white;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+    .btn-wa:hover { background: #1ebc59; }
+
+    .chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      min-height: 44px;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chip-delete {
+      cursor: pointer;
+      color: #ff8787;
+      font-weight: bold;
+    }
+
+    .participant-row {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    @media (min-width: 500px) {
+      .participant-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .alert {
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: rgba(201, 42, 42, 0.25);
+      border: 1px solid rgba(201, 42, 42, 0.4);
+      color: #ff8787;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* KİŞİYE ÖZEL GİZLİ KART EKRANI */
+    .reveal-card {
+      text-align: center;
+      padding: 36px 20px;
+    }
+
+    .gift-box {
+      font-size: 4rem;
+      margin: 16px 0;
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.3s;
+    }
+    .gift-box:hover { transform: scale(1.1) rotate(5deg); }
+
+    .target-name {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--gold);
+      margin: 12px 0;
+      text-shadow: 0 0 20px rgba(246, 196, 69, 0.6);
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <canvas id="snow"></canvas>
+  <canvas id="confetti"></canvas>
+
+  <div class="container">
+    
+    <!-- 1. YÖNETİCİ ÇEKİLİŞ OLUŞTURMA EKRANI -->
+    <div id="view-admin">
+      <header>
+        <h1>🎄 Yılbaşı Çekilişi 🎁</h1>
+        <p>İsimleri yazın, çekilişi yapın ve herkese kendi özel linkini iletin!</p>
+      </header>
+
+      <div id="step-setup" class="card">
+        <div class="card-title">👥 Katılımcı Listesi</div>
+        <div class="input-row">
+          <input type="text" id="nameInput" placeholder="Katılımcı ismi yazın..." autofocus>
+          <button class="btn btn-red" id="btnAdd">Ekle</button>
+        </div>
+
+        <div class="chips-container" id="chipsList"></div>
+        <div id="errorAlert" class="alert"></div>
+
+        <button class="btn btn-gold" id="btnDraw">🎲 Çekilişi Yap ve Linkleri Üret</button>
+      </div>
+
+      <!-- ÇEKİLİŞ SONUÇ LİNKLERİ -->
+      <div id="step-results" class="card hidden">
+        <div class="card-title">🎉 Çekiliş Başarıyla Tamamlandı!</div>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+          Hiç kimse birbirinin sonucunu göremez. Çekilişi yapan kişi dahil kimseye çıkan ismi görmemek için her kişiye sadece kendi linkini gönderin:
+        </p>
+
+        <div id="linksList"></div>
+
+        <button class="btn btn-outline" style="width: 100%; margin-top: 14px;" id="btnReset">
+          🔄 Yeni Çekiliş Başlat
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. KİŞİYE ÖZEL GİZLİ SONUÇ GÖRÜNTÜLEME EKRANI (LİNKE TIKLAYANLAR GÖRÜR) -->
+    <div id="view-reveal" class="card reveal-card hidden">
+      <h2 style="color: var(--gold); font-size: 1.8rem; margin-bottom: 8px;">🎄 Hoş Geldin <span id="senderName"></span>! 🎅</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Yılbaşı çekilişinde kime hediye alacağını öğrenmek için hediye paketine tıkla:
+      </p>
+
+      <div id="openSection">
+        <div class="gift-box" id="btnOpenGift">🎁</div>
+        <p style="color: var(--gold); font-weight: 500;">(Açmak için dokun)</p>
+      </div>
+
+      <div id="resultSection" class="hidden">
+        <p style="color: var(--text-muted); font-size: 1rem; margin-top: 14px;">Hediye Alacağın Kişi:</p>
+        <div class="target-name" id="receiverName">---</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">
+          🤫 Bu bilgi sadece sana özeldir. Gizliliği koru ve kimseye söyleme!
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // =========================================================================
+    // 🔒 GİZLİ EŞLEŞTİRME KURALI (SADECE SENİN BİLDİĞİN BÖLÜM)
+    // =========================================================================
+    const _GIZLI_KURAL = {
+      veren: 'behlül',
+      alan: 'dilara',
+      mutual: false // false: Behlül Dilara'ya alır (en az dikkat çeken yöntemdir)
+    };
+    // =========================================================================
+
+    // ŞİFRELEME (URL'den çıplak gözle ismi kimse okuyamaz)
+    function encodeSecret(giver, receiver) {
+      const text = `${giver}:${receiver}`;
+      const bytes = new TextEncoder().encode(text);
+      for (let i = 0; i < bytes.length; i++) bytes[i] ^= 0x5B;
+      let bin = '';
+      bytes.forEach(b => bin += String.fromCharCode(b));
+      return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function decodeSecret(hash) {
+      try {
+        let str = hash.replace(/-/g, '+').replace(/_/g, '/');
+        while (str.length % 4) str += '=';
+        const bin = atob(str);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i) ^ 0x5B;
+        const decoded = new TextDecoder().decode(bytes);
+        return decoded.split(':');
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // SAYFA AÇILDIĞINDA ÖZEL LİNKLE Mİ GELİNDİ KONTROLÜ
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#s=')) {
+        const payload = hash.substring(3);
+        const res = decodeSecret(payload);
+        if (res && res.length === 2) {
+          const [giver, receiver] = res;
+          document.getElementById('view-admin').classList.add('hidden');
+          document.getElementById('view-reveal').classList.remove('hidden');
+          document.getElementById('senderName').textContent = giver;
+          document.getElementById('receiverName').textContent = receiver;
+          
+          document.getElementById('btnOpenGift').addEventListener('click', () => {
+            document.getElementById('openSection').classList.add('hidden');
+            document.getElementById('resultSection').classList.remove('hidden');
+            fireConfetti();
+          });
+          return;
+        }
+      }
+    });
+
+    // ADMIN TARAFI: KATILIMCI YÖNETİMİ
+    let participants = [];
+    const nameInput = document.getElementById('nameInput');
+    const btnAdd = document.getElementById('btnAdd');
+    const chipsList = document.getElementById('chipsList');
+    const errorAlert = document.getElementById('errorAlert');
+    const btnDraw = document.getElementById('btnDraw');
+    const stepSetup = document.getElementById('step-setup');
+    const stepResults = document.getElementById('step-results');
+    const linksList = document.getElementById('linksList');
+    const btnReset = document.getElementById('btnReset');
+
+    function showError(msg) {
+      errorAlert.textContent = msg;
+      errorAlert.style.display = 'block';
+      setTimeout(() => errorAlert.style.display = 'none', 3500);
+    }
+
+    function addParticipant() {
+      const name = nameInput.value.trim();
+      if (!name) return;
+      if (participants.some(p => p.toLocaleLowerCase('tr-TR') === name.toLocaleLowerCase('tr-TR'))) {
+        showError("Bu isim zaten listede var!");
+        return;
+      }
+      participants.push(name);
+      nameInput.value = "";
+      renderChips();
+    }
+
+    btnAdd.addEventListener('click', addParticipant);
+    nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addParticipant(); });
+
+    window.removeParticipant = function(idx) {
+      participants.splice(idx, 1);
+      renderChips();
+    };
+
+    function renderChips() {
+      chipsList.innerHTML = participants.map((name, i) => `
+        <div class="chip">
+          <span>${name}</span>
+          <span class="chip-delete" onclick="removeParticipant(${i})">&times;</span>
+        </div>
+      `).join('');
+    }
+
+    // DERANGEMENT VE ÇEKİLİŞ MANTIĞI
+    function getDerangement(arr) {
+      const n = arr.length;
+      let res = [...arr];
+      let valid = false;
+      while (!valid) {
+        for (let i = n - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [res[i], res[j]] = [res[j], res[i]];
+        }
+        valid = true;
+        for (let i = 0; i < n; i++) {
+          if (res[i] === arr[i]) { valid = false; break; }
+        }
+      }
+      return res;
+    }
+
+    function executeSecretDraw(names) {
+      const norm = s => s.trim().toLocaleLowerCase('tr-TR');
+      const bIdx = names.findIndex(n => norm(n) === _GIZLI_KURAL.veren);
+      const dIdx = names.findIndex(n => norm(n) === _GIZLI_KURAL.alan);
+      const hasSpecial = (bIdx !== -1 && dIdx !== -1 && bIdx !== dIdx);
+
+      let attempts = 0;
+      while (attempts < 4000) {
+        attempts++;
+        const deranged = getDerangement(names);
+        if (!hasSpecial) {
+          const map = {};
+          names.forEach((name, i) => map[name] = deranged[i]);
+          return map;
+        }
+
+        if (deranged[bIdx] === names[dIdx]) {
+          const map = {};
+          names.forEach((name, i) => map[name] = deranged[i]);
+          return map;
+        }
+      }
+
+      const fallback = getDerangement(names);
+      const map = {};
+      names.forEach((name, i) => map[name] = fallback[i]);
+      return map;
+    }
+
+    btnDraw.addEventListener('click', () => {
+      if (participants.length < 3) {
+        showError("Çekiliş yapabilmek için en az 3 isim eklemelisiniz!");
+        return;
+      }
+
+      const pairings = executeSecretDraw(participants);
+      stepSetup.classList.add('hidden');
+      stepResults.classList.remove('hidden');
+
+      // GitHub Pages'te tam site adresi
+      const baseUrl = window.location.href.split('#')[0];
+
+      linksList.innerHTML = participants.map(giver => {
+        const receiver = pairings[giver];
+        const hash = encodeSecret(giver, receiver);
+        const secretLink = `${baseUrl}#s=${hash}`;
+        const waMsg = encodeURIComponent(`🎄 Merhaba ${giver}! Yılbaşı çekilişinde hediye alacağın kişi belli oldu. Görmek için linke tıkla:\n${secretLink}`);
+
+        return `
+          <div class="participant-row">
+            <strong>${giver}</strong>
+            <div class="btn-group">
+              <button class="btn btn-outline" onclick="copyLink('${secretLink}')">📋 Linki Kopyala</button>
+              <a href="https://api.whatsapp.com/send?text=${waMsg}" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    });
+
+    window.copyLink = function(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        alert("Bağlantı kopyalandı! Şimdi ilgili kişiye gönderebilirsiniz.");
+      });
+    };
+
+    btnReset.addEventListener('click', () => {
+      if (confirm("Yeni bir çekiliş başlatmak istiyor musunuz?")) {
+        stepResults.classList.add('hidden');
+        stepSetup.classList.remove('hidden');
+      }
+    });
+
+    // KAR EFEKTİ
+    const sCanvas = document.getElementById('snow');
+    const sCtx = sCanvas.getContext('2d');
+    let sw = sCanvas.width = window.innerWidth;
+    let sh = sCanvas.height = window.innerHeight;
+    const flakes = Array.from({ length: 40 }, () => ({
+      x: Math.random() * sw, y: Math.random() * sh, r: Math.random() * 2 + 1, d: Math.random() + 0.5
+    }));
+    window.addEventListener('resize', () => {
+      sw = sCanvas.width = window.innerWidth;
+      sh = sCanvas.height = window.innerHeight;
+    });
+    function drawSnow() {
+      sCtx.clearRect(0, 0, sw, sh);
+      sCtx.fillStyle = "rgba(255, 255, 255, 0.7)";
+      sCtx.beginPath();
+      flakes.forEach(f => {
+        sCtx.moveTo(f.x, f.y);
+        sCtx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+        f.y += f.d;
+        if (f.y > sh) { f.y = -5; f.x = Math.random() * sw; }
+      });
+      sCtx.fill();
+      requestAnimationFrame(drawSnow);
+    }
+    drawSnow();
+
+    // HEDİYE AÇILINCA PATLAYAN KONFETİ EFEKTİ
+    const cCanvas = document.getElementById('confetti');
+    const cCtx = cCanvas.getContext('2d');
+    let confettis = [];
+    function fireConfetti() {
+      cCanvas.width = window.innerWidth;
+      cCanvas.height = window.innerHeight;
+      const colors = ['#f6c445', '#c92a2a', '#2b8a3e', '#ffffff'];
+      for (let i = 0; i < 90; i++) {
+        confettis.push({
+          x: cCanvas.width / 2,
+          y: cCanvas.height / 2,
+          vx: (Math.random() - 0.5) * 14,
+          vy: (Math.random() - 0.5) * 14 - 3,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1
+        });
+      }
+      renderConfetti();
+    }
+    function renderConfetti() {
+      cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+      confettis.forEach(c => {
+        c.x += c.vx;
+        c.y += c.vy;
+        c.vy += 0.25; // yerçekimi
+        c.alpha -= 0.012;
+        cCtx.fillStyle = c.color;
+        cCtx.globalAlpha = Math.max(0, c.alpha);
+        cCtx.fillRect(c.x, c.y, c.size, c.size);
+      });
+      confettis = confettis.filter(c => c.alpha > 0);
+      if (confettis.length > 0) requestAnimationFrame(renderConfetti);
+    }
+  </script>
+</body>
+</html>
