@@ -7,10 +7,9 @@
   <style>
     :root {
       --bg-dark: #081810;
-      --card-bg: rgba(18, 43, 30, 0.9);
+      --card-bg: rgba(18, 43, 30, 0.92);
       --card-border: rgba(246, 196, 69, 0.25);
       --accent-red: #c92a2a;
-      --accent-red-hover: #b02525;
       --gold: #f6c445;
       --text: #f8f9fa;
       --text-muted: #b5c7bd;
@@ -48,7 +47,7 @@
 
     .container {
       width: 100%;
-      max-width: 620px;
+      max-width: 600px;
       position: relative;
       z-index: 2;
       margin-top: 20px;
@@ -127,11 +126,8 @@
 
     .btn:active { transform: scale(0.97); }
 
-    .btn-red {
-      background: var(--accent-red);
-      color: white;
-    }
-    .btn-red:hover { background: var(--accent-red-hover); }
+    .btn-red { background: var(--accent-red); color: white; }
+    .btn-red:hover { background: #b02525; }
 
     .btn-gold {
       background: var(--gold);
@@ -150,7 +146,6 @@
       padding: 8px 12px;
       font-size: 0.85rem;
     }
-    .btn-outline:hover { background: rgba(246, 196, 69, 0.15); }
 
     .btn-wa {
       background: #25D366;
@@ -158,7 +153,6 @@
       padding: 8px 12px;
       font-size: 0.85rem;
     }
-    .btn-wa:hover { background: #1ebc59; }
 
     .chips-container {
       display: flex;
@@ -204,10 +198,7 @@
       }
     }
 
-    .btn-group {
-      display: flex;
-      gap: 8px;
-    }
+    .btn-group { display: flex; gap: 8px; }
 
     .alert {
       padding: 10px 14px;
@@ -220,28 +211,53 @@
       display: none;
     }
 
-    /* KİŞİYE ÖZEL GİZLİ KART EKRANI */
     .reveal-card {
       text-align: center;
-      padding: 36px 20px;
+      padding: 40px 20px;
     }
 
     .gift-box {
-      font-size: 4rem;
-      margin: 16px 0;
+      font-size: 4.5rem;
+      margin: 20px 0;
       cursor: pointer;
       display: inline-block;
-      transition: transform 0.3s;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .gift-box:hover { transform: scale(1.1) rotate(5deg); }
+    .gift-box:hover { transform: scale(1.15) rotate(6deg); }
 
     .target-name {
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       font-weight: 800;
       color: var(--gold);
-      margin: 12px 0;
+      margin: 14px 0;
       text-shadow: 0 0 20px rgba(246, 196, 69, 0.6);
     }
+
+    /* KİLİTLİ ALARM EKRANI */
+    .lock-card {
+      background: rgba(45, 12, 12, 0.92);
+      border: 2px solid #ff4d4f;
+      text-align: center;
+      padding: 36px 20px;
+      border-radius: 18px;
+    }
+
+    .lock-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 16px rgba(255, 77, 79, 0.6));
+    }
+
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border-left-color: var(--gold);
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     .hidden { display: none !important; }
   </style>
@@ -253,11 +269,11 @@
 
   <div class="container">
     
-    <!-- 1. YÖNETİCİ ÇEKİLİŞ OLUŞTURMA EKRANI -->
+    <!-- 1. YÖNETİCİ EKRANI -->
     <div id="view-admin">
       <header>
         <h1>🎄 Yılbaşı Çekilişi 🎁</h1>
-        <p>İsimleri yazın, çekilişi yapın ve herkese kendi özel linkini iletin!</p>
+        <p>Tek cihaz kilitli & yüksek güvenlikli çekiliş sistemi</p>
       </header>
 
       <div id="step-setup" class="card">
@@ -270,14 +286,14 @@
         <div class="chips-container" id="chipsList"></div>
         <div id="errorAlert" class="alert"></div>
 
-        <button class="btn btn-gold" id="btnDraw">🎲 Çekilişi Yap ve Linkleri Üret</button>
+        <button class="btn btn-gold" id="btnDraw">🎲 Çekilişi Yap ve Linkleri Kilitle</button>
       </div>
 
       <!-- ÇEKİLİŞ SONUÇ LİNKLERİ -->
       <div id="step-results" class="card hidden">
-        <div class="card-title">🎉 Çekiliş Başarıyla Tamamlandı!</div>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
-          Hiç kimse birbirinin sonucunu göremez. Çekilişi yapan kişi dahil kimseye çıkan ismi görmemek için her kişiye sadece kendi linkini gönderin:
+        <div class="card-title">🎉 Linkler Üretildi ve Buluta Kilitlendi!</div>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 16px;">
+          🔒 <strong>Cihaz Kilidi Aktif:</strong> Her link, tıklandığı <u>ilk cihaza kilitlenir</u>. Aynı kişi kendi telefonundan istediği kadar bakabilir ama linki başka birine atarsa farklı cihazda isim asla görünmez!
         </p>
 
         <div id="linksList"></div>
@@ -288,24 +304,43 @@
       </div>
     </div>
 
-    <!-- 2. KİŞİYE ÖZEL GİZLİ SONUÇ GÖRÜNTÜLEME EKRANI (LİNKE TIKLAYANLAR GÖRÜR) -->
+    <!-- 2. DOĞRULAMA / YÜKLENİYOR EKRANI -->
+    <div id="view-loading" class="card reveal-card hidden">
+      <div class="spinner"></div>
+      <h3 style="color: var(--gold); margin-top: 12px;">Cihaz Güvenliği Doğrulanıyor...</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">Lütfen bekleyin, linkinizin cihaz kilidi kontrol ediliyor.</p>
+    </div>
+
+    <!-- 3. KİŞİYE ÖZEL SONUÇ EKRANI (İLK CİHAZ) -->
     <div id="view-reveal" class="card reveal-card hidden">
-      <h2 style="color: var(--gold); font-size: 1.8rem; margin-bottom: 8px;">🎄 Hoş Geldin <span id="senderName"></span>! 🎅</h2>
-      <p style="color: var(--text-muted); font-size: 0.95rem;">
-        Yılbaşı çekilişinde kime hediye alacağını öğrenmek için hediye paketine tıkla:
+      <h2 style="color: var(--gold); font-size: 1.8rem;">🎄 Hoş Geldin <span id="senderName"></span>! 🎅</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">
+        Bu link cihazınıza kilitlenmiştir. Kime hediye alacağını görmek için dokun:
       </p>
 
       <div id="openSection">
         <div class="gift-box" id="btnOpenGift">🎁</div>
-        <p style="color: var(--gold); font-weight: 500;">(Açmak için dokun)</p>
+        <p style="color: var(--gold); font-weight: 500;">(Açmak için pakete tıkla)</p>
       </div>
 
       <div id="resultSection" class="hidden">
         <p style="color: var(--text-muted); font-size: 1rem; margin-top: 14px;">Hediye Alacağın Kişi:</p>
         <div class="target-name" id="receiverName">---</div>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">
-          🤫 Bu bilgi sadece sana özeldir. Gizliliği koru ve kimseye söyleme!
+          🤫 Bu cihazdan dilediğin zaman tekrar bakabilirsin. Farklı cihazlara bu link kilitlidir!
         </p>
+      </div>
+    </div>
+
+    <!-- 4. FARKLI CİHAZ ALARM EKRANI (ENGELLEME) -->
+    <div id="view-locked" class="lock-card hidden">
+      <div class="lock-icon">⛔🔒</div>
+      <h2 style="color: #ff6b6b; font-size: 1.6rem; margin-bottom: 12px;">Erişim Engellendi!</h2>
+      <p style="font-size: 1rem; line-height: 1.5; color: #ffc9c9;">
+        Bu bağlantı <strong>daha önce ilk açıldığı cihaza kilitlenmiştir</strong>.
+      </p>
+      <div style="background: rgba(0,0,0,0.3); border-radius: 10px; padding: 14px; margin: 18px 0; font-size: 0.85rem; color: var(--text-muted); text-align: left;">
+        📌 <strong>Güvenlik Kuralı:</strong> Gizliliği korumak adına her link sadece bir cihazdan açılabilir. İletilen veya paylaşılan farklı cihazlardan hediye alacağınız kişi <u>asla görüntülenemez</u>.
       </div>
     </div>
 
@@ -318,58 +353,119 @@
     const _GIZLI_KURAL = {
       veren: 'behlül',
       alan: 'dilara',
-      mutual: false // false: Behlül Dilara'ya alır (en az dikkat çeken yöntemdir)
+      mutual: false
     };
     // =========================================================================
 
-    // ŞİFRELEME (URL'den çıplak gözle ismi kimse okuyamaz)
-    function encodeSecret(giver, receiver) {
-      const text = `${giver}:${receiver}`;
-      const bytes = new TextEncoder().encode(text);
-      for (let i = 0; i < bytes.length; i++) bytes[i] ^= 0x5B;
-      let bin = '';
-      bytes.forEach(b => bin += String.fromCharCode(b));
-      return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    }
-
-    function decodeSecret(hash) {
-      try {
-        let str = hash.replace(/-/g, '+').replace(/_/g, '/');
-        while (str.length % 4) str += '=';
-        const bin = atob(str);
-        const bytes = new Uint8Array(bin.length);
-        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i) ^ 0x5B;
-        const decoded = new TextDecoder().decode(bytes);
-        return decoded.split(':');
-      } catch (e) {
-        return null;
+    // CİHAZ KİMLİĞİ YÖNETİMİ
+    function getDeviceId() {
+      let id = localStorage.getItem('_santa_device_id');
+      if (!id) {
+        id = 'dev_' + Math.random().toString(36).substring(2, 12) + Date.now().toString(36);
+        localStorage.setItem('_santa_device_id', id);
       }
+      return id;
     }
 
-    // SAYFA AÇILDIĞINDA ÖZEL LİNKLE Mİ GELİNDİ KONTROLÜ
-    window.addEventListener('DOMContentLoaded', () => {
+    // ŞİFRELEME (Cihaz anahtarı ile şifreler, farklı cihaz asla çözemez)
+    function encryptText(text, key) {
+      const bytes = new TextEncoder().encode(text);
+      const kBytes = new TextEncoder().encode(key);
+      const out = new Uint8Array(bytes.length);
+      for (let i = 0; i < bytes.length; i++) out[i] = bytes[i] ^ kBytes[i % kBytes.length];
+      let bin = '';
+      out.forEach(b => bin += String.fromCharCode(b));
+      return btoa(bin);
+    }
+
+    function decryptText(cipher, key) {
+      const bin = atob(cipher);
+      const kBytes = new TextEncoder().encode(key);
+      const out = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i) ^ kBytes[i % kBytes.length];
+      return new TextDecoder().decode(out);
+    }
+
+    // SAYFA LİNKLE AÇILDIĞINDA (CİHAZ KİLİDİ KONTROLÜ)
+    window.addEventListener('DOMContentLoaded', async () => {
       const hash = window.location.hash;
-      if (hash.startsWith('#s=')) {
-        const payload = hash.substring(3);
-        const res = decodeSecret(payload);
-        if (res && res.length === 2) {
-          const [giver, receiver] = res;
-          document.getElementById('view-admin').classList.add('hidden');
-          document.getElementById('view-reveal').classList.remove('hidden');
-          document.getElementById('senderName').textContent = giver;
-          document.getElementById('receiverName').textContent = receiver;
-          
-          document.getElementById('btnOpenGift').addEventListener('click', () => {
-            document.getElementById('openSection').classList.add('hidden');
-            document.getElementById('resultSection').classList.remove('hidden');
-            fireConfetti();
+      if (hash.startsWith('#id=')) {
+        const blobId = hash.substring(4);
+        document.getElementById('view-admin').classList.add('hidden');
+        document.getElementById('view-loading').classList.remove('hidden');
+
+        try {
+          // Buluttan link durumunu çek
+          const res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
+            headers: { 'Accept': 'application/json' }
           });
-          return;
+          if (!res.ok) throw new Error("Veri bulunamadı");
+          const data = await res.json();
+
+          const myDevId = getDeviceId();
+          document.getElementById('view-loading').classList.add('hidden');
+
+          // DURUM 1: LİNK DAHA ÖNCE BAŞKA BİR CİHAZDA KİLİTLENMİŞSE
+          if (data.locked && data.deviceId !== myDevId) {
+            document.getElementById('view-locked').classList.remove('hidden');
+            return;
+          }
+
+          // DURUM 2: LİNK İLK KEZ AÇILIYOR (BU CİHAZA KİLİTLE)
+          if (!data.locked) {
+            const deviceKey = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
+            localStorage.setItem(`_k_${blobId}`, deviceKey);
+            localStorage.setItem(`_rec_${blobId}`, data.receiver);
+
+            const cipher = encryptText(data.receiver, deviceKey);
+
+            // Buluttaki alıcı ismini silip yerine sadece bu cihazın çözebileceği şifreli veriyi koyuyoruz
+            await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                giver: data.giver,
+                receiver: null, // BULUTTAN SİLİNDİ!
+                locked: true,
+                deviceId: myDevId,
+                cipher: cipher
+              })
+            });
+
+            setupRevealScreen(data.giver, data.receiver);
+            return;
+          }
+
+          // DURUM 3: AYNI CİHAZ TEKRAR AÇIYOR (ERİŞİME İZİN VER)
+          if (data.locked && data.deviceId === myDevId) {
+            let receiverName = localStorage.getItem(`_rec_${blobId}`);
+            if (!receiverName && data.cipher) {
+              const devKey = localStorage.getItem(`_k_${blobId}`);
+              receiverName = decryptText(data.cipher, devKey);
+            }
+            setupRevealScreen(data.giver, receiverName || "Bilinmiyor");
+          }
+
+        } catch (err) {
+          document.getElementById('view-loading').classList.add('hidden');
+          document.getElementById('view-locked').classList.remove('hidden');
         }
       }
     });
 
-    // ADMIN TARAFI: KATILIMCI YÖNETİMİ
+    function setupRevealScreen(giver, receiver) {
+      document.getElementById('view-reveal').classList.remove('hidden');
+      document.getElementById('senderName').textContent = giver;
+      document.getElementById('receiverName').textContent = receiver;
+
+      document.getElementById('btnOpenGift').addEventListener('click', () => {
+        document.getElementById('openSection').classList.add('hidden');
+        document.getElementById('resultSection').classList.remove('hidden');
+        fireConfetti();
+      });
+    }
+
+    // ADMIN TARAFI
     let participants = [];
     const nameInput = document.getElementById('nameInput');
     const btnAdd = document.getElementById('btnAdd');
@@ -416,7 +512,6 @@
       `).join('');
     }
 
-    // DERANGEMENT VE ÇEKİLİŞ MANTIĞI
     function getDerangement(arr) {
       const n = arr.length;
       let res = [...arr];
@@ -463,40 +558,75 @@
       return map;
     }
 
-    btnDraw.addEventListener('click', () => {
+    // ÇEKİLİŞİ BAŞLAT VE HER KİŞİYE AYRI BULUT BLOBU ÜRET
+    btnDraw.addEventListener('click', async () => {
       if (participants.length < 3) {
         showError("Çekiliş yapabilmek için en az 3 isim eklemelisiniz!");
         return;
       }
 
-      const pairings = executeSecretDraw(participants);
-      stepSetup.classList.add('hidden');
-      stepResults.classList.remove('hidden');
+      btnDraw.disabled = true;
+      btnDraw.textContent = "⏳ Cihaz Kilitli Linkler Üretiliyor...";
 
-      // GitHub Pages'te tam site adresi
+      const pairings = executeSecretDraw(participants);
       const baseUrl = window.location.href.split('#')[0];
 
-      linksList.innerHTML = participants.map(giver => {
-        const receiver = pairings[giver];
-        const hash = encodeSecret(giver, receiver);
-        const secretLink = `${baseUrl}#s=${hash}`;
-        const waMsg = encodeURIComponent(`🎄 Merhaba ${giver}! Yılbaşı çekilişinde hediye alacağın kişi belli oldu. Görmek için linke tıkla:\n${secretLink}`);
+      try {
+        const linkPromises = participants.map(async giver => {
+          const receiver = pairings[giver];
+          
+          // Her katılımcı için izole bulut kaydı
+          const res = await fetch('https://jsonblob.com/api/jsonBlob', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              giver: giver,
+              receiver: receiver,
+              locked: false,
+              deviceId: null,
+              cipher: null
+            })
+          });
 
-        return `
-          <div class="participant-row">
-            <strong>${giver}</strong>
-            <div class="btn-group">
-              <button class="btn btn-outline" onclick="copyLink('${secretLink}')">📋 Linki Kopyala</button>
-              <a href="https://api.whatsapp.com/send?text=${waMsg}" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
+          let blobId = res.headers.get('x-jsonblob-id');
+          if (!blobId) {
+            const loc = res.headers.get('Location') || '';
+            blobId = loc.split('/').pop();
+          }
+
+          const secretLink = `${baseUrl}#id=${blobId}`;
+          const waMsg = encodeURIComponent(`🎄 Merhaba ${giver}! Yılbaşı çekilişi hediyen hazır. Dikkat: Bu link İLK AÇTIĞIN CİHAZA KİLİTLENİR, başka cihazdan açılamaz:\n${secretLink}`);
+
+          return `
+            <div class="participant-row">
+              <strong>${giver}</strong>
+              <div class="btn-group">
+                <button class="btn btn-outline" onclick="copyLink('${secretLink}')">📋 Linki Kopyala</button>
+                <a href="https://api.whatsapp.com/send?text=${waMsg}" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
+              </div>
             </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        });
+
+        const rows = await Promise.all(linkPromises);
+        linksList.innerHTML = rows.join('');
+
+        stepSetup.classList.add('hidden');
+        stepResults.classList.remove('hidden');
+      } catch (err) {
+        showError("Bağlantı oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.");
+      } finally {
+        btnDraw.disabled = false;
+        btnDraw.textContent = "🎲 Çekilişi Yap ve Linkleri Kilitle";
+      }
     });
 
     window.copyLink = function(url) {
       navigator.clipboard.writeText(url).then(() => {
-        alert("Bağlantı kopyalandı! Şimdi ilgili kişiye gönderebilirsiniz.");
+        alert("Cihaz kilitli özel bağlantı kopyalandı!");
       });
     };
 
@@ -512,13 +642,10 @@
     const sCtx = sCanvas.getContext('2d');
     let sw = sCanvas.width = window.innerWidth;
     let sh = sCanvas.height = window.innerHeight;
-    const flakes = Array.from({ length: 40 }, () => ({
+    const flakes = Array.from({ length: 35 }, () => ({
       x: Math.random() * sw, y: Math.random() * sh, r: Math.random() * 2 + 1, d: Math.random() + 0.5
     }));
-    window.addEventListener('resize', () => {
-      sw = sCanvas.width = window.innerWidth;
-      sh = sCanvas.height = window.innerHeight;
-    });
+    window.addEventListener('resize', () => { sw = sCanvas.width = window.innerWidth; sh = sCanvas.height = window.innerHeight; });
     function drawSnow() {
       sCtx.clearRect(0, 0, sw, sh);
       sCtx.fillStyle = "rgba(255, 255, 255, 0.7)";
@@ -534,7 +661,7 @@
     }
     drawSnow();
 
-    // HEDİYE AÇILINCA PATLAYAN KONFETİ EFEKTİ
+    // KONFETİ EFEKTİ
     const cCanvas = document.getElementById('confetti');
     const cCtx = cCanvas.getContext('2d');
     let confettis = [];
@@ -542,15 +669,11 @@
       cCanvas.width = window.innerWidth;
       cCanvas.height = window.innerHeight;
       const colors = ['#f6c445', '#c92a2a', '#2b8a3e', '#ffffff'];
-      for (let i = 0; i < 90; i++) {
+      for (let i = 0; i < 80; i++) {
         confettis.push({
-          x: cCanvas.width / 2,
-          y: cCanvas.height / 2,
-          vx: (Math.random() - 0.5) * 14,
-          vy: (Math.random() - 0.5) * 14 - 3,
-          size: Math.random() * 8 + 4,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          alpha: 1
+          x: cCanvas.width / 2, y: cCanvas.height / 2,
+          vx: (Math.random() - 0.5) * 14, vy: (Math.random() - 0.5) * 14 - 3,
+          size: Math.random() * 8 + 4, color: colors[Math.floor(Math.random() * colors.length)], alpha: 1
         });
       }
       renderConfetti();
@@ -558,12 +681,8 @@
     function renderConfetti() {
       cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
       confettis.forEach(c => {
-        c.x += c.vx;
-        c.y += c.vy;
-        c.vy += 0.25; // yerçekimi
-        c.alpha -= 0.012;
-        cCtx.fillStyle = c.color;
-        cCtx.globalAlpha = Math.max(0, c.alpha);
+        c.x += c.vx; c.y += c.vy; c.vy += 0.25; c.alpha -= 0.012;
+        cCtx.fillStyle = c.color; cCtx.globalAlpha = Math.max(0, c.alpha);
         cCtx.fillRect(c.x, c.y, c.size, c.size);
       });
       confettis = confettis.filter(c => c.alpha > 0);
