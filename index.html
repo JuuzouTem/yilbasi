@@ -50,7 +50,7 @@
       max-width: 600px;
       position: relative;
       z-index: 2;
-      margin-top: 20px;
+      margin-top: 10px;
     }
 
     header {
@@ -213,12 +213,12 @@
 
     .reveal-card {
       text-align: center;
-      padding: 40px 20px;
+      padding: 36px 20px;
     }
 
     .gift-box {
       font-size: 4.5rem;
-      margin: 20px 0;
+      margin: 16px 0;
       cursor: pointer;
       display: inline-block;
       transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -235,17 +235,18 @@
 
     /* KİLİTLİ ALARM EKRANI */
     .lock-card {
-      background: rgba(45, 12, 12, 0.92);
+      background: rgba(50, 14, 14, 0.95);
       border: 2px solid #ff4d4f;
       text-align: center;
       padding: 36px 20px;
       border-radius: 18px;
+      box-shadow: 0 0 40px rgba(255, 77, 79, 0.4);
     }
 
     .lock-icon {
       font-size: 4rem;
-      margin-bottom: 16px;
-      filter: drop-shadow(0 0 16px rgba(255, 77, 79, 0.6));
+      margin-bottom: 14px;
+      filter: drop-shadow(0 0 16px rgba(255, 77, 79, 0.7));
     }
 
     .spinner {
@@ -273,7 +274,7 @@
     <div id="view-admin">
       <header>
         <h1>🎄 Yılbaşı Çekilişi 🎁</h1>
-        <p>Tek cihaz kilitli & yüksek güvenlikli çekiliş sistemi</p>
+        <p>Cihaz Korumalı & Yüksek Güvenlikli Çekiliş</p>
       </header>
 
       <div id="step-setup" class="card">
@@ -291,9 +292,9 @@
 
       <!-- ÇEKİLİŞ SONUÇ LİNKLERİ -->
       <div id="step-results" class="card hidden">
-        <div class="card-title">🎉 Linkler Üretildi ve Buluta Kilitlendi!</div>
+        <div class="card-title">🎉 Linkler Hazırlandı ve Kilitlendi!</div>
         <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 16px;">
-          🔒 <strong>Cihaz Kilidi Aktif:</strong> Her link, tıklandığı <u>ilk cihaza kilitlenir</u>. Aynı kişi kendi telefonundan istediği kadar bakabilir ama linki başka birine atarsa farklı cihazda isim asla görünmez!
+          🔒 <strong>Tek Cihaz Koruması:</strong> Her link tıklandığı ilk cihaza kilitlenir. Aynı kişi kendi telefonundan istediği kadar tekrar bakabilir, ancak linki başkasına iletirse farklı cihazda isim asla açılmaz!
         </p>
 
         <div id="linksList"></div>
@@ -308,39 +309,39 @@
     <div id="view-loading" class="card reveal-card hidden">
       <div class="spinner"></div>
       <h3 style="color: var(--gold); margin-top: 12px;">Cihaz Güvenliği Doğrulanıyor...</h3>
-      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">Lütfen bekleyin, linkinizin cihaz kilidi kontrol ediliyor.</p>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">Linkinizin cihaz kilidi kontrol ediliyor, lütfen bekleyin.</p>
     </div>
 
     <!-- 3. KİŞİYE ÖZEL SONUÇ EKRANI (İLK CİHAZ) -->
     <div id="view-reveal" class="card reveal-card hidden">
       <h2 style="color: var(--gold); font-size: 1.8rem;">🎄 Hoş Geldin <span id="senderName"></span>! 🎅</h2>
       <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">
-        Bu link cihazınıza kilitlenmiştir. Kime hediye alacağını görmek için dokun:
+        Bu bağlantı cihazınıza kilitlendi. Hediye alacağın kişiyi görmek için pakete tıkla:
       </p>
 
       <div id="openSection">
         <div class="gift-box" id="btnOpenGift">🎁</div>
-        <p style="color: var(--gold); font-weight: 500;">(Açmak için pakete tıkla)</p>
+        <p style="color: var(--gold); font-weight: 500;">(Açmak için dokun)</p>
       </div>
 
       <div id="resultSection" class="hidden">
         <p style="color: var(--text-muted); font-size: 1rem; margin-top: 14px;">Hediye Alacağın Kişi:</p>
         <div class="target-name" id="receiverName">---</div>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">
-          🤫 Bu cihazdan dilediğin zaman tekrar bakabilirsin. Farklı cihazlara bu link kilitlidir!
+          🤫 Bu cihazdan istediğin zaman tekrar bakabilirsin. Başka cihazlara bu link kilitlenmiştir!
         </p>
       </div>
     </div>
 
-    <!-- 4. FARKLI CİHAZ ALARM EKRANI (ENGELLEME) -->
+    <!-- 4. FARKLI CİHAZ ENGEL EKRANI -->
     <div id="view-locked" class="lock-card hidden">
       <div class="lock-icon">⛔🔒</div>
       <h2 style="color: #ff6b6b; font-size: 1.6rem; margin-bottom: 12px;">Erişim Engellendi!</h2>
       <p style="font-size: 1rem; line-height: 1.5; color: #ffc9c9;">
-        Bu bağlantı <strong>daha önce ilk açıldığı cihaza kilitlenmiştir</strong>.
+        Bu bağlantı <strong>başka bir cihazda zaten açılmış ve o cihaza kilitlenmiştir</strong>.
       </p>
       <div style="background: rgba(0,0,0,0.3); border-radius: 10px; padding: 14px; margin: 18px 0; font-size: 0.85rem; color: var(--text-muted); text-align: left;">
-        📌 <strong>Güvenlik Kuralı:</strong> Gizliliği korumak adına her link sadece bir cihazdan açılabilir. İletilen veya paylaşılan farklı cihazlardan hediye alacağınız kişi <u>asla görüntülenemez</u>.
+        📌 <strong>Gizlilik İlkesi:</strong> Çekiliş güvenliği gereği her link sadece ilk açılan telefondan görüntülenebilir. İletilen veya yönlendirilen cihazlardan kişi adı asla gösterilmez.
       </div>
     </div>
 
@@ -357,96 +358,108 @@
     };
     // =========================================================================
 
-    // CİHAZ KİMLİĞİ YÖNETİMİ
+    // CİHAZ KİMLİĞİ
     function getDeviceId() {
-      let id = localStorage.getItem('_santa_device_id');
+      let id = localStorage.getItem('_santa_dev_id');
       if (!id) {
-        id = 'dev_' + Math.random().toString(36).substring(2, 12) + Date.now().toString(36);
-        localStorage.setItem('_santa_device_id', id);
+        id = 'dev_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now().toString(36);
+        localStorage.setItem('_santa_dev_id', id);
       }
       return id;
     }
 
-    // ŞİFRELEME (Cihaz anahtarı ile şifreler, farklı cihaz asla çözemez)
-    function encryptText(text, key) {
+    // ŞİFRELEME (URL'den çıplak gözle ismi kimse okuyamaz)
+    function encryptData(text, key) {
       const bytes = new TextEncoder().encode(text);
       const kBytes = new TextEncoder().encode(key);
       const out = new Uint8Array(bytes.length);
       for (let i = 0; i < bytes.length; i++) out[i] = bytes[i] ^ kBytes[i % kBytes.length];
       let bin = '';
       out.forEach(b => bin += String.fromCharCode(b));
-      return btoa(bin);
+      return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     }
 
-    function decryptText(cipher, key) {
-      const bin = atob(cipher);
-      const kBytes = new TextEncoder().encode(key);
-      const out = new Uint8Array(bin.length);
-      for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i) ^ kBytes[i % kBytes.length];
-      return new TextDecoder().decode(out);
+    function decryptData(cipher, key) {
+      try {
+        let str = cipher.replace(/-/g, '+').replace(/_/g, '/');
+        while (str.length % 4) str += '=';
+        const bin = atob(str);
+        const kBytes = new TextEncoder().encode(key);
+        const out = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i) ^ kBytes[i % kBytes.length];
+        return new TextDecoder().decode(out);
+      } catch(e) {
+        return null;
+      }
     }
 
-    // SAYFA LİNKLE AÇILDIĞINDA (CİHAZ KİLİDİ KONTROLÜ)
+    // LİNKLE AÇILDIĞINDA (CİHAZ KONTROL VE KİLİTLEME)
     window.addEventListener('DOMContentLoaded', async () => {
       const hash = window.location.hash;
-      if (hash.startsWith('#id=')) {
-        const blobId = hash.substring(4);
+      if (hash.includes('k=') && hash.includes('d=')) {
+        const params = new URLSearchParams(hash.substring(1));
+        const lockId = params.get('k');
+        const cipher = params.get('d');
+
+        if (!lockId || !cipher) return;
+
         document.getElementById('view-admin').classList.add('hidden');
         document.getElementById('view-loading').classList.remove('hidden');
 
+        const myDevId = getDeviceId();
+        const localClaim = localStorage.getItem('_claimed_' + lockId);
+
+        // 1. Zaten bu cihazda önceden açılmışsa direkt aç
+        if (localClaim === myDevId) {
+          const plain = decryptData(cipher, lockId + "_xMas");
+          if (plain) {
+            const [giver, receiver] = plain.split(':::');
+            document.getElementById('view-loading').classList.add('hidden');
+            setupRevealScreen(giver, receiver);
+            return;
+          }
+        }
+
+        // 2. Bulut kilidini sorgula (ntfy.sh - %100 CORS uyumlu ve ücretsiz)
         try {
-          // Buluttan link durumunu çek
-          const res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
-            headers: { 'Accept': 'application/json' }
-          });
-          if (!res.ok) throw new Error("Veri bulunamadı");
-          const data = await res.json();
+          const res = await fetch(`https://ntfy.sh/${lockId}/json?poll=1&since=all`);
+          const text = await res.text();
+          const lines = text.trim().split('\n').filter(Boolean);
+          const messages = lines.map(line => {
+            try { return JSON.parse(line); } catch(e) { return null; }
+          }).filter(m => m && m.event === 'message');
 
-          const myDevId = getDeviceId();
-          document.getElementById('view-loading').classList.add('hidden');
-
-          // DURUM 1: LİNK DAHA ÖNCE BAŞKA BİR CİHAZDA KİLİTLENMİŞSE
-          if (data.locked && data.deviceId !== myDevId) {
-            document.getElementById('view-locked').classList.remove('hidden');
-            return;
-          }
-
-          // DURUM 2: LİNK İLK KEZ AÇILIYOR (BU CİHAZA KİLİTLE)
-          if (!data.locked) {
-            const deviceKey = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
-            localStorage.setItem(`_k_${blobId}`, deviceKey);
-            localStorage.setItem(`_rec_${blobId}`, data.receiver);
-
-            const cipher = encryptText(data.receiver, deviceKey);
-
-            // Buluttaki alıcı ismini silip yerine sadece bu cihazın çözebileceği şifreli veriyi koyuyoruz
-            await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                giver: data.giver,
-                receiver: null, // BULUTTAN SİLİNDİ!
-                locked: true,
-                deviceId: myDevId,
-                cipher: cipher
-              })
+          // DURUM A: Link daha önce hiç açılmamış -> Bu cihaza kilitle!
+          if (messages.length === 0) {
+            await fetch(`https://ntfy.sh/${lockId}`, {
+              method: 'POST',
+              body: myDevId
             });
+            localStorage.setItem('_claimed_' + lockId, myDevId);
 
-            setupRevealScreen(data.giver, data.receiver);
+            const plain = decryptData(cipher, lockId + "_xMas");
+            const [giver, receiver] = plain.split(':::');
+            document.getElementById('view-loading').classList.add('hidden');
+            setupRevealScreen(giver, receiver);
             return;
           }
 
-          // DURUM 3: AYNI CİHAZ TEKRAR AÇIYOR (ERİŞİME İZİN VER)
-          if (data.locked && data.deviceId === myDevId) {
-            let receiverName = localStorage.getItem(`_rec_${blobId}`);
-            if (!receiverName && data.cipher) {
-              const devKey = localStorage.getItem(`_k_${blobId}`);
-              receiverName = decryptText(data.cipher, devKey);
-            }
-            setupRevealScreen(data.giver, receiverName || "Bilinmiyor");
+          // DURUM B: Link daha önce açılmış -> Cihaz kontrolü yap
+          const firstClaim = messages[0].message;
+          if (firstClaim === myDevId) {
+            // Aynı cihaz
+            localStorage.setItem('_claimed_' + lockId, myDevId);
+            const plain = decryptData(cipher, lockId + "_xMas");
+            const [giver, receiver] = plain.split(':::');
+            document.getElementById('view-loading').classList.add('hidden');
+            setupRevealScreen(giver, receiver);
+          } else {
+            // FARKLI CİHAZ! ERİŞİMİ ENGELLE
+            document.getElementById('view-loading').classList.add('hidden');
+            document.getElementById('view-locked').classList.remove('hidden');
           }
-
         } catch (err) {
+          // Bağlantı hatası durumunda güvenlik gereği kilitle
           document.getElementById('view-loading').classList.add('hidden');
           document.getElementById('view-locked').classList.remove('hidden');
         }
@@ -514,6 +527,7 @@
 
     function getDerangement(arr) {
       const n = arr.length;
+      if (n <= 1) return [...arr];
       let res = [...arr];
       let valid = false;
       while (!valid) {
@@ -558,70 +572,38 @@
       return map;
     }
 
-    // ÇEKİLİŞİ BAŞLAT VE HER KİŞİYE AYRI BULUT BLOBU ÜRET
-    btnDraw.addEventListener('click', async () => {
+    // ÇEKİLİŞ BUTONU (SIFIR GECİKME, SIFIR CORS HATASI)
+    btnDraw.addEventListener('click', () => {
       if (participants.length < 3) {
         showError("Çekiliş yapabilmek için en az 3 isim eklemelisiniz!");
         return;
       }
 
-      btnDraw.disabled = true;
-      btnDraw.textContent = "⏳ Cihaz Kilitli Linkler Üretiliyor...";
-
       const pairings = executeSecretDraw(participants);
       const baseUrl = window.location.href.split('#')[0];
 
-      try {
-        const linkPromises = participants.map(async giver => {
-          const receiver = pairings[giver];
-          
-          // Her katılımcı için izole bulut kaydı
-          const res = await fetch('https://jsonblob.com/api/jsonBlob', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-              giver: giver,
-              receiver: receiver,
-              locked: false,
-              deviceId: null,
-              cipher: null
-            })
-          });
+      // Her katılımcı için cihaz kilitli link oluştur
+      const rows = participants.map(giver => {
+        const receiver = pairings[giver];
+        const lockId = 'yb_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+        const cipher = encryptData(`${giver}:::${receiver}`, lockId + "_xMas");
+        const secretLink = `${baseUrl}#k=${lockId}&d=${cipher}`;
+        const waMsg = encodeURIComponent(`🎄 Merhaba ${giver}! Yılbaşı çekilişinde hediye alacağın kişi belli oldu.\n⚠️ Dikkat: Bu link İLK AÇTIĞIN CİHAZA KİLİTLENİR, başka telefondan açılamaz:\n${secretLink}`);
 
-          let blobId = res.headers.get('x-jsonblob-id');
-          if (!blobId) {
-            const loc = res.headers.get('Location') || '';
-            blobId = loc.split('/').pop();
-          }
-
-          const secretLink = `${baseUrl}#id=${blobId}`;
-          const waMsg = encodeURIComponent(`🎄 Merhaba ${giver}! Yılbaşı çekilişi hediyen hazır. Dikkat: Bu link İLK AÇTIĞIN CİHAZA KİLİTLENİR, başka cihazdan açılamaz:\n${secretLink}`);
-
-          return `
-            <div class="participant-row">
-              <strong>${giver}</strong>
-              <div class="btn-group">
-                <button class="btn btn-outline" onclick="copyLink('${secretLink}')">📋 Linki Kopyala</button>
-                <a href="https://api.whatsapp.com/send?text=${waMsg}" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
-              </div>
+        return `
+          <div class="participant-row">
+            <strong>${giver}</strong>
+            <div class="btn-group">
+              <button class="btn btn-outline" onclick="copyLink('${secretLink}')">📋 Linki Kopyala</button>
+              <a href="https://api.whatsapp.com/send?text=${waMsg}" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
             </div>
-          `;
-        });
+          </div>
+        `;
+      });
 
-        const rows = await Promise.all(linkPromises);
-        linksList.innerHTML = rows.join('');
-
-        stepSetup.classList.add('hidden');
-        stepResults.classList.remove('hidden');
-      } catch (err) {
-        showError("Bağlantı oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.");
-      } finally {
-        btnDraw.disabled = false;
-        btnDraw.textContent = "🎲 Çekilişi Yap ve Linkleri Kilitle";
-      }
+      linksList.innerHTML = rows.join('');
+      stepSetup.classList.add('hidden');
+      stepResults.classList.remove('hidden');
     });
 
     window.copyLink = function(url) {
