@@ -349,12 +349,11 @@
 
   <script>
     // =========================================================================
-    // 🔒 GİZLİ EŞLEŞTİRME KURALI (SADECE SENİN BİLDİĞİN BÖLÜM)
+    // 🔒 GİZLİ EŞLEŞTİRME AYARI (SADECE SENİN BİLDİĞİN BÖLÜM)
     // =========================================================================
     const _GIZLI_KURAL = {
-      veren: 'behlül',
-      alan: 'dilara',
-      mutual: false
+      p1: 'behlül',
+      p2: 'dilara'
     };
     // =========================================================================
 
@@ -420,7 +419,7 @@
           }
         }
 
-        // 2. Bulut kilidini sorgula (ntfy.sh - %100 CORS uyumlu ve ücretsiz)
+        // 2. Bulut kilidini sorgula (ntfy.sh - CORS uyumlu)
         try {
           const res = await fetch(`https://ntfy.sh/${lockId}/json?poll=1&since=all`);
           const text = await res.text();
@@ -447,7 +446,6 @@
           // DURUM B: Link daha önce açılmış -> Cihaz kontrolü yap
           const firstClaim = messages[0].message;
           if (firstClaim === myDevId) {
-            // Aynı cihaz
             localStorage.setItem('_claimed_' + lockId, myDevId);
             const plain = decryptData(cipher, lockId + "_xMas");
             const [giver, receiver] = plain.split(':::');
@@ -459,7 +457,6 @@
             document.getElementById('view-locked').classList.remove('hidden');
           }
         } catch (err) {
-          // Bağlantı hatası durumunda güvenlik gereği kilitle
           document.getElementById('view-loading').classList.add('hidden');
           document.getElementById('view-locked').classList.remove('hidden');
         }
@@ -543,36 +540,50 @@
       return res;
     }
 
+    // KARŞILIKLI EŞLEŞTİRME VE ÇEKİLİŞ MANTIĞI
     function executeSecretDraw(names) {
       const norm = s => s.trim().toLocaleLowerCase('tr-TR');
-      const bIdx = names.findIndex(n => norm(n) === _GIZLI_KURAL.veren);
-      const dIdx = names.findIndex(n => norm(n) === _GIZLI_KURAL.alan);
-      const hasSpecial = (bIdx !== -1 && dIdx !== -1 && bIdx !== dIdx);
+      const bIdx = names.findIndex(n => norm(n) === _GIZLI_KURAL.p1);
+      const dIdx = names.findIndex(n => norm(n) === _GIZLI_KURAL.p2);
 
-      let attempts = 0;
-      while (attempts < 4000) {
-        attempts++;
-        const deranged = getDerangement(names);
-        if (!hasSpecial) {
-          const map = {};
-          names.forEach((name, i) => map[name] = deranged[i]);
-          return map;
-        }
+      // Behlül ve Dilara karşılıklı olarak birbirine çıksın (En az 4 kişi varsa)
+      if (bIdx !== -1 && dIdx !== -1 && bIdx !== dIdx && names.length >= 4) {
+        const bName = names[bIdx];
+        const dName = names[dIdx];
 
-        if (deranged[bIdx] === names[dIdx]) {
-          const map = {};
-          names.forEach((name, i) => map[name] = deranged[i]);
-          return map;
-        }
+        // Geriye kalan diğer katılımcılar
+        const others = names.filter((_, idx) => idx !== bIdx && idx !== dIdx);
+        const othersDeranged = getDerangement(others);
+
+        const map = {};
+        map[bName] = dName; // Behlül -> Dilara'ya alır
+        map[dName] = bName; // Dilara -> Behlül'e alır
+        others.forEach((p, i) => {
+          map[p] = othersDeranged[i]; // Kalanlar kendi arasında kimse kendine çıkmadan dağılır
+        });
+        return map;
       }
 
-      const fallback = getDerangement(names);
+      // 3 kişi varsa döngüsel yapılır: Behlül -> Dilara -> 3. kişi -> Behlül
+      if (bIdx !== -1 && dIdx !== -1 && bIdx !== dIdx && names.length === 3) {
+        const bName = names[bIdx];
+        const dName = names[dIdx];
+        const thirdName = names.find((_, idx) => idx !== bIdx && idx !== dIdx);
+        const map = {};
+        map[bName] = dName;
+        map[dName] = thirdName;
+        map[thirdName] = bName;
+        return map;
+      }
+
+      // Standart çekiliş (Behlül veya Dilara listede yoksa)
+      const deranged = getDerangement(names);
       const map = {};
-      names.forEach((name, i) => map[name] = fallback[i]);
+      names.forEach((name, i) => map[name] = deranged[i]);
       return map;
     }
 
-    // ÇEKİLİŞ BUTONU (SIFIR GECİKME, SIFIR CORS HATASI)
+    // ÇEKİLİŞ BUTONU
     btnDraw.addEventListener('click', () => {
       if (participants.length < 3) {
         showError("Çekiliş yapabilmek için en az 3 isim eklemelisiniz!");
@@ -582,7 +593,6 @@
       const pairings = executeSecretDraw(participants);
       const baseUrl = window.location.href.split('#')[0];
 
-      // Her katılımcı için cihaz kilitli link oluştur
       const rows = participants.map(giver => {
         const receiver = pairings[giver];
         const lockId = 'yb_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
